@@ -44,17 +44,22 @@ export const processTranscriptWithAI = async (
 
 /**
  * Simulates generating a transcript from metadata if actual scraping fails (Fallback AI).
- * In a real app, this would process the audio file. Here we use the title to "hallucinate" a demo transcript
- * if the scraper mock returns empty text.
  */
 export const generateSimulatedTranscript = async (videoTitle: string): Promise<string> => {
     try {
         const ai = getAiClient();
         const modelId = 'gemini-3-flash-preview';
         
-        const prompt = `Imagine you are writing a transcript for a viral video titled "${videoTitle}". 
-        Generate a realistic, 200-word spoken-word script that matches this title. 
-        Language: Vietnamese.`;
+        // Revised prompt to handle generic titles better
+        const prompt = `You are an AI simulating a video transcript.
+        The user provided a video with the title: "${videoTitle}".
+        
+        If the title contains specific keywords (like "cooking", "news", "coding"), generate a realistic 150-word transcript about that topic in Vietnamese.
+        
+        If the title is generic (like "Facebook Video ID:..." or "TikTok Video"), generate a polite message in Vietnamese explaining that:
+        "Because this is a demo app without a backend server, we cannot extract the specific audio content of this video ID directly from the browser due to security restrictions. In a production environment, the real audio would be processed here."
+        
+        Do NOT invent a fake story if the ID is generic. Be helpful and technical.`;
     
         const response = await ai.models.generateContent({
           model: modelId,
