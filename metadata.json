@@ -1,0 +1,5 @@
+{
+  "name": "SnapScribe - Video Downloader & AI Transcript",
+  "description": "A powerful tool to download videos without watermarks from TikTok/Facebook and extract transcripts using AI. No file upload required.",
+  "requestFramePermissions": []
+}
